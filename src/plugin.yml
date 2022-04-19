@@ -1,0 +1,29 @@
+name: CycascWarpPoint
+version: 1.3.6-spigot1.18.2
+author: Dunkelklinge1
+website: https://www.cycasc.net
+
+main: net.cycasc.mc.cycascwarppoint_main.MainCycascWarpPoint
+
+commands:
+  sethome:
+    description: Saves a home location where you can teleport to.
+    usage: "Usage: /sethome [optional name]"
+  home:
+    description: Teleports you to the specified home.
+    usage: "Usage: /home [optional name]"
+  delhome:
+    description: Deletes the specified home.
+    usage: "Usage: /delhome [optional name]"
+  setwarp:
+    description: Saves a warppoint where you can teleport to.
+    usage: "Usage: /setwarp <required name>"
+  warp:
+    description: Teleports you to the specified warppoint.
+    usage: "Usage: /warp <required name>"
+  delwarp:
+    description: Deletes the specified warppoint.
+    usage: "Usage: /delwarp <required name>"
+  listwarp:
+    description: Lists all warppoints and their creators in chat that match the specified pattern.
+    usage: "Usage: /listwarp [optional pattern]"

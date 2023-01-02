@@ -17,7 +17,7 @@ commands:
     usage: "Usage: /delhome [optional name]"
   listhome:
     description: Lists all your homes in chat that match the specified pattern.
-    usage: "Usage: /listwarp [optional pattern]"
+    usage: "Usage: /listhome [optional pattern]"
   setwarp:
     description: Saves a warppoint where you can teleport to.
     usage: "Usage: /setwarp <required name>"

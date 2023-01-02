@@ -16,7 +16,7 @@ commands:
     description: Deletes the specified home.
     usage: "Usage: /delhome [optional name]"
   listhome:
-    description: Lists all warppoints and their creators in chat that match the specified pattern.
+    description: Lists all your homes in chat that match the specified pattern.
     usage: "Usage: /listwarp [optional pattern]"
   setwarp:
     description: Saves a warppoint where you can teleport to.

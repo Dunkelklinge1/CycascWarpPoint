@@ -1,5 +1,5 @@
 name: CycascWarpPoint
-version: 1.3.6-spigot1.19.3
+version: 1.4.1-spigot1.19.3
 author: Dunkelklinge1
 website: https://www.cycasc.net
 
@@ -15,6 +15,9 @@ commands:
   delhome:
     description: Deletes the specified home.
     usage: "Usage: /delhome [optional name]"
+  listhome:
+    description: Lists all warppoints and their creators in chat that match the specified pattern.
+    usage: "Usage: /listwarp [optional pattern]"
   setwarp:
     description: Saves a warppoint where you can teleport to.
     usage: "Usage: /setwarp <required name>"

@@ -83,6 +83,20 @@ public class MainCycascWarpPoint extends JavaPlugin implements Listener {
 				}
 			}
 		}
+		else if (cmd.getName().equalsIgnoreCase("listhome")) {
+			if (sender instanceof Player) {
+				Player p = (Player) sender;
+				if (args.length == 0) {
+					listHome(p, "");
+				}
+				else if (args.length == 1) {
+					listHome(p, args[0]);
+				}
+				else {
+					return false;
+				}
+			}
+		}
 		else if (cmd.getName().equalsIgnoreCase("setwarp")) {
 			if (sender instanceof Player) {
 				Player p = (Player) sender;
@@ -283,7 +297,7 @@ public class MainCycascWarpPoint extends JavaPlugin implements Listener {
 				
 				br.close();
 				
-				//Datei überschreiben...
+				//Datei ��berschreiben...
 				BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path + "/homes.csv", false), StandardCharsets.UTF_8));
 				for (String s : lines) {
 					bw.write(s);
@@ -310,6 +324,69 @@ public class MainCycascWarpPoint extends JavaPlugin implements Listener {
 			else {
 				p.sendMessage(ChatColor.DARK_RED + "You dont have any home named \"" + name + "\".");
 			}
+		}
+	}
+	
+	private void listHome(Player p, String pattern) {
+		try {
+			List<String> homesToList = new ArrayList<String>();
+			
+			int allCount = 0;
+			int patternCount = 0;
+			File f = new File(path + "/homes.csv");
+			if (f.exists()) {
+				BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path + "/homes.csv"), StandardCharsets.UTF_8));
+				
+				while (br.ready()) {
+					String currentLine = br.readLine();
+					String[] splittedLine = currentLine.split(";");
+					// In homesToList aufnehmen, wenn home dem player gehört...
+					if (UUID.fromString(splittedLine[0]).equals(p.getUniqueId())) {
+						allCount++;
+						// ...und pattern leer ist oder currentLine pattern enthält
+						if (pattern.isEmpty() || currentLine.toLowerCase().contains(pattern.toLowerCase())) {
+							patternCount++;
+							homesToList.add(currentLine);
+						}
+					}
+				}
+				
+				br.close();
+			}
+			
+			if (homesToList.size() > 0) {
+				if (pattern.isEmpty()) {
+					p.sendMessage(ChatColor.DARK_GREEN + "List of your homes (count: " + allCount + ")...");
+				}
+				else {
+					p.sendMessage(ChatColor.DARK_GREEN + "List of your homes that match the pattern \"" + pattern + "\" (count: " + patternCount + ")...");
+				}
+				
+				for (String s : homesToList) {
+					String[] splittedLine = s.split(";");
+					
+					//0 = Player UUID
+					//1 = Name des Warps
+					//2 = World UID
+					//3 = x
+					//4 = y
+					//5 = z
+					
+					p.sendMessage(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + splittedLine[1] + ChatColor.GRAY + " auf " + ChatColor.GOLD + Bukkit.getServer().getWorld(UUID.fromString(splittedLine[2])).getName() + ChatColor.GRAY + " (Biome: " + ChatColor.ITALIC + getHome(p, splittedLine[1]).getBlock().getBiome().name() + ChatColor.RESET + ChatColor.GRAY + ")");
+				}
+			}
+			else {
+				if (pattern.isEmpty()) {
+					p.sendMessage(ChatColor.DARK_RED + "You have not created any homes.");
+				}
+				else {
+					p.sendMessage(ChatColor.DARK_RED + "You have no homes that match the pattern \"" + pattern + "\".");
+					p.sendMessage(ChatColor.GRAY + "Use the command \"/" + this.getCommand("listwarp").getName() + "\" (without any parameters) to list all your homes.");
+				}
+			}
+		}
+		catch (Exception ex) {
+			sendErrorMsg(ex, p);
 		}
 	}
 	
@@ -501,7 +578,7 @@ public class MainCycascWarpPoint extends JavaPlugin implements Listener {
 			
 			if (warpsToList.size() > 0) {
 				if (pattern.isEmpty()) {
-					p.sendMessage(ChatColor.DARK_GREEN + "List off all warppoints (count: " + allCount + ")...");
+					p.sendMessage(ChatColor.DARK_GREEN + "List of all warppoints (count: " + allCount + ")...");
 				}
 				else {
 					p.sendMessage(ChatColor.DARK_GREEN + "List of warppoints that match the pattern \"" + pattern + "\" (count: " + patternCount + ")...");
@@ -518,10 +595,10 @@ public class MainCycascWarpPoint extends JavaPlugin implements Listener {
 					//5 = z
 					
 					if (Bukkit.getPlayer(UUID.fromString(splittedLine[0])) != null) {
-						p.sendMessage(ChatColor.DARK_GREEN + splittedLine[1] + ChatColor.GRAY + " auf " + ChatColor.GOLD + Bukkit.getServer().getWorld(UUID.fromString(splittedLine[2])).getName() + ChatColor.GRAY + " von " + ChatColor.GOLD + Bukkit.getPlayer(UUID.fromString(splittedLine[0])).getName());
+						p.sendMessage(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + splittedLine[1] + ChatColor.GRAY + " auf " + ChatColor.GOLD + Bukkit.getServer().getWorld(UUID.fromString(splittedLine[2])).getName() + ChatColor.GRAY + " von " + ChatColor.GOLD + Bukkit.getPlayer(UUID.fromString(splittedLine[0])).getName() + ChatColor.GRAY + " (Biome: " + ChatColor.ITALIC + getWarp(p, splittedLine[1]).getBlock().getBiome().name() + ChatColor.RESET + ChatColor.GRAY + ")");
 					}
 					else {
-						p.sendMessage(ChatColor.DARK_GREEN + splittedLine[1] + ChatColor.GRAY + " auf " + ChatColor.GOLD + Bukkit.getServer().getWorld(UUID.fromString(splittedLine[2])).getName() + ChatColor.GRAY + " von " + ChatColor.GOLD + Bukkit.getOfflinePlayer(UUID.fromString(splittedLine[0])).getName());
+						p.sendMessage(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + splittedLine[1] + ChatColor.GRAY + " auf " + ChatColor.GOLD + Bukkit.getServer().getWorld(UUID.fromString(splittedLine[2])).getName() + ChatColor.GRAY + " von " + ChatColor.GOLD + Bukkit.getOfflinePlayer(UUID.fromString(splittedLine[0])).getName() + ChatColor.GRAY + " (Biome: " + ChatColor.ITALIC + getWarp(p, splittedLine[1]).getBlock().getBiome().name() + ChatColor.RESET + ChatColor.GRAY + ")");
 					}
 				}
 			}
@@ -542,7 +619,7 @@ public class MainCycascWarpPoint extends JavaPlugin implements Listener {
 	
 	private void sendErrorMsg(Exception ex, Player p) {
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + ex.toString());
-		p.sendMessage(ChatColor.DARK_RED + "An error has occurred.");
+		p.sendMessage(ChatColor.DARK_RED + "An error has occurred. The warp or home file may be corrupt!");
 		p.sendMessage(ChatColor.GRAY + "Details: " + ex.getMessage());
 	}
 	

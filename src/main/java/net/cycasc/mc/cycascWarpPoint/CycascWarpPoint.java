@@ -380,22 +380,21 @@ public final class CycascWarpPoint extends JavaPlugin implements Listener {
                 }
 
                 for (String[] s : homesToList) {
-                    // 0 = Player UUID
-                    // 1 = Name des Warps
-                    // 2 = World UID
-                    // 3 = x
-                    // 4 = y
-                    // 5 = z
+                    // 0 = Name des Warps
+                    // 1 = World UID
+                    // 2 = x
+                    // 3 = y
+                    // 4 = z
 
                     String worldName = "UNKNOWN [" + s[1] + "]";
                     String biomeName = "UNKNOWN";
-                    World w = Bukkit.getServer().getWorld(UUID.fromString(s[2]));
+                    World w = Bukkit.getServer().getWorld(UUID.fromString(s[1]));
                     if (w != null) {
                         worldName = w.getName();
-                        biomeName = getHome(p, s[1]).getBlock().getBiome().name();
+                        biomeName = getHome(p, s[0]).getBlock().getBiome().name();
                     }
 
-                    p.sendMessage(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + s[1] + ChatColor.GRAY + " auf " + ChatColor.GOLD + worldName + ChatColor.GRAY + " (Biome: " + ChatColor.ITALIC + biomeName + ChatColor.RESET + ChatColor.GRAY + ")");
+                    p.sendMessage(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + s[0] + ChatColor.GRAY + " auf " + ChatColor.GOLD + worldName + ChatColor.GRAY + " (Biome: " + ChatColor.ITALIC + biomeName + ChatColor.RESET + ChatColor.GRAY + ")");
                 }
             }
             else {

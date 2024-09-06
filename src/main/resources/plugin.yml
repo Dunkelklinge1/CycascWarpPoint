@@ -1,5 +1,5 @@
 name: CycascWarpPoint
-version: '1.5.1-paper1.21.1'
+version: '1.5.2-paper1.21.1'
 main: net.cycasc.mc.cycascWarpPoint.CycascWarpPoint
 api-version: '1.21'
 authors: [ Dunkelklinge1 ]
